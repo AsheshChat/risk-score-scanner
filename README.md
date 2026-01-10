@@ -1,122 +1,127 @@
 # 🛡️ Risk Score Scanner
 
-A lightweight **Python GUI application** that performs security scanning of a target IP or hostname using **Nmap**, analyzes open ports, services, version information, and known vulnerabilities, then calculates an overall **risk score (0–100)** with a corresponding severity label.
+**Educational cybersecurity assessment tool**  
+A lightweight GUI application designed to help security practitioners, students, and blue/purple team members quickly evaluate the attack surface and basic risk level of systems using Nmap.
 
-Perfect for students, security enthusiasts, penetration testers, and small/medium organizations performing **authorized security assessments**.
+The tool performs automated scanning, service detection, vulnerability script execution, and generates a **heuristic risk score (0–100)** together with severity classification — making it easier to understand exposure at a glance.
 
-**Important**: This tool is intended **exclusively for educational purposes and authorized security testing**. Unauthorized scanning of systems you do not own or have explicit written permission to test is **illegal** in most jurisdictions.
+**Primary purpose**:  
+Educational use • Security awareness training • Initial triage & quick security posture checks  
+(Always with proper authorization!)
 
----
-
-## ✨ Key Features
-
-- Modern and intuitive **Tkinter GUI** (simple, cross-platform)
-- Input validation & progress feedback during scanning
-- Full port scanning with service/version detection (`-sV`)
-- Execution of safe/default NSE scripts + vulnerability-oriented scripts
-- Parses **Nmap XML output** using `xml.etree.ElementTree`
-- Extracts and classifies:
-  - Open ports & associated services/versions
-  - Potential vulnerabilities (from `vuln`/`vulners` scripts)
-  - Misconfigurations & weak credentials warnings
-- Calculates a **composite risk score** based on multiple weighted factors
-- Color-coded severity classification (Low → Critical)
-- Export results to **text** or **JSON** format
-- Responsive status bar & error handling
-
-### Current Risk Scoring Logic (v1.0)
-
-The risk score (0–100) is calculated using a **weighted point system**:
-
-| Factor                                  | Max Points | Conditions / Weighting logic                                                                                 | Rationale                                                                 |
-|-----------------------------------------|------------|---------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------|
-| Number of open ports                    | 25         | 1–5 → 5–10 pts, 6–15 → 15 pts, 16+ → 25 pts                                                                  | More open ports = larger attack surface                                   |
-| Dangerous / high-risk ports open        | 30         | 21(FTP),23(Telnet),445(SMB),3389(RDP), etc. → +8–15 pts each                                                | Historically abused services                                              |
-| Outdated/vulnerable service versions    | 20         | Detected old versions known for CVEs (basic keyword matching)                                               | Version fingerprinting gives strong hints                                 |
-| Detected vulnerabilities (NSE)          | 40         | `vuln`/`vulners` scripts output → +5–20 pts per issue depending on severity/confidence (CVSS-like)         | Most important risk indicator                                             |
-| **BONUS PENALTIES**                     | —          | Anonymous FTP, weak/default creds, self-signed certs, etc. → +5–15 pts                                      | Common misconfigurations that attackers love                              |
-
-**Final severity classification**:
-
-| Score Range | Label          | Color     | Meaning / Recommended Action                                      |
-|-------------|----------------|-----------|-------------------------------------------------------------------|
-| 0–29        | 🟢 **Low**     | Green     | Acceptable for most environments — routine monitoring            |
-| 30–59       | 🟡 **Medium**  | Yellow    | Attention needed — plan remediation within weeks/months          |
-| 60–84       | 🟠 **High**    | Orange    | Serious exposure — remediate within days                          |
-| 85–100      | 🔴 **Critical**| Red       | Immediate action required — high probability of compromise       |
-
-> **Note**: The scoring is **heuristic/not scientific**. It should be used as an **initial triage indicator**, not as a replacement for professional tools (Nessus, OpenVAS, Qualys, etc.).
+**Important legal notice**:  
+This tool may **only** be used on systems you own or on systems where you have **explicit written permission** to perform security testing.  
+Unauthorized scanning is a criminal offense in most jurisdictions.
 
 ---
 
-## 📸 Preview
+## 🎯 Main Security Assessment Features
 
-*(Add real screenshots here once you upload them to the repository)*
+- Simple, cross-platform graphical interface (Tkinter)
+- Target validation & user-friendly scanning workflow
+- Service & version detection (`-sV`)
+- Execution of safe & vulnerability-oriented NSE scripts
+- Extraction & classification of:
+  - Exposed services & versions
+  - Potentially vulnerable services
+  - Common misconfigurations & dangerous exposures
+- Heuristic **risk scoring** based on multiple security-relevant factors
+- Clear severity classification with recommended urgency
+- Visual feedback during scanning
 
-**Main window**  
-![Main GUI](https://github.com/YOUR_USERNAME/risk-score-scanner/assets/gui-main.png)
+### Current Risk Scoring Approach (heuristic – v1.0)
 
-**Scan results with risk score**  
-![Results view](https://github.com/YOUR_USERNAME/risk-score-scanner/assets/results-example.png)
+| Security Factor                         | Max Points | Trigger conditions                                      | Security context                              |
+|-----------------------------------------|------------|---------------------------------------------------------|-----------------------------------------------|
+| Number of open ports                    | 25         | More ports = significantly larger attack surface       | Classic exposure metric                       |
+| Presence of high-risk / legacy ports    | 30         | FTP, Telnet, SMBv1, RDP, etc.                           | Services with history of severe abuse         |
+| Outdated/vulnerable software versions   | 20         | Old versions with known public exploits                 | Strong exploitation signal                    |
+| Positive vulnerability script findings  | 40         | `vuln`, `vulners`, `http-vuln-*`, etc. results         | Most important real-world risk indicator      |
+| Common dangerous misconfigurations      | bonus      | Anonymous FTP, default creds, weak protocols, etc.      | Frequent paths of compromise                  |
+
+**Resulting severity levels**:
+
+| Score       | Label          | Color     | Recommended security action                           |
+|-------------|----------------|-----------|-------------------------------------------------------|
+| 0–29        | 🟢 Low         | Green     | Routine monitoring, good general hygiene              |
+| 30–59       | 🟡 Medium      | Yellow    | Plan remediation – medium-term priority               |
+| 60–84       | 🟠 High        | Orange    | Active remediation needed – short-term priority       |
+| 85–100      | 🔴 Critical    | Red       | Immediate action required – very high exposure        |
+
+> **Important**: This is **not** a professional vulnerability scanner.  
+> The scoring is heuristic/educational and should be treated as a **conversation starter**, not a definitive security assessment.
 
 ---
 
-## 🛠️ Installation & Quick Start
+## 🛠️ Quick Start (for authorized testing only)
 
-### Prerequisites
+### Requirements
 
-- **Python 3.8+**
-- **[Nmap](https://nmap.org/download.html)** installed and added to system PATH  
-  • Windows → official installer  
-  • Linux → `sudo apt install nmap` / `sudo dnf install nmap`  
-  • macOS → `brew install nmap`
-- Recommended: `python-nmap` library (optional, for easier integration in future)
+- Python 3.8+
+- [Nmap](https://nmap.org/download.html) installed and available in system PATH
 
-### Setup
+### Basic usage
 
-```bash
-# Clone the repository
 git clone https://github.com/YOUR_USERNAME/risk-score-scanner.git
-
-# Enter project directory
 cd risk-score-scanner
 
-# (Recommended) Create & activate virtual environment
+# Optional but recommended
 python3 -m venv venv
-source venv/bin/activate          # Linux/macOS
-venv\Scripts\activate             # Windows
+source venv/bin/activate           # Linux/macOS
+# or on Windows: venv\Scripts\activate
 
-# Install requirements (very minimal for now)
-pip install -r requirements.txt   # Currently almost empty
+pip install -r requirements.txt    # currently very minimal
 
-# Launch the application
 python3 risk_score_scanner.py
 
-⚠️ Legal & Ethical Disclaimer
-This tool must only be used:
 
-On systems you own
-On systems where you have explicit written permission to perform security testing
-In accordance with all applicable laws in your jurisdiction
+# ⚠️ Strict Legal & Ethical Boundaries
 
-Unauthorized scanning can be considered a computer crime (e.g. CFAA in US, Computer Misuse Act in UK, etc.).
-The authors accept no responsibility for misuse or damage caused by this software.
+**This tool may only be used:**
 
-🚀 Future Improvements
-🔧 Technical Enhancements
+- On systems you **legally own**, or
+- On systems where you have **current, explicit, written permission** to perform security testing
 
-CVE and CVSS score integration (NVD)
+**Unauthorized use** (even "just to check") is considered a **computer crime** in most jurisdictions, including but not limited to:
 
-Service-based risk weighting (e.g., SSH vs FTP)
+- **CFAA** (Computer Fraud and Abuse Act – United States)
+- **Computer Misuse Act** (United Kingdom)
+- Similar legislation in EU countries, Australia, Canada, and many others
 
-Customizable scoring logic
+**The project authors accept absolutely no responsibility** for any misuse, damage, legal consequences, or other negative outcomes.
 
-Multiple scan profiles (quick, full, stealth)
+**Use responsibly. Use ethically. Get permission in writing.**
 
-📊 Reporting & Export
+---
 
-Export results to PDF, JSON, or CSV
+## 🚀 Planned Security-focused Improvements
 
-Scan history and comparisons
+### Better risk understanding
 
-Executive-style summary reports
+- Real **CVSS / CVE** integration (automatic NVD lookup)
+- Service-specific risk profiles  
+  (`SSH` vs `RDP` vs `MongoDB` vs `SMB` vs …)
+- Different scoring presets for various environments  
+  (`IoT` • `OT` • `enterprise` • `cloud`)
+
+### More useful security reporting
+
+- Executive-style **one-pagers**
+- **Top 5 critical findings** highlighting
+- Change tracking between scans (**hardening validation**)
+- Export formats:  
+  • PDF  
+  • JSON  
+  • simple Markdown report
+
+### Enhanced usability for security practitioners
+
+- Multiple scan **personas**  
+  `Quick check` • `Thorough audit` • `Vulnerability focus`
+- Better visualization of **most concerning findings**
+- **Dark mode** for late-night incident response sessions 😄
+
+---
+
+Contributions focused on **improving security value** and **responsible usage** are very welcome!  
+❤️ Thank you for helping keep this project ethical and useful.
