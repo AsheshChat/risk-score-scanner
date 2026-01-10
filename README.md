@@ -1,9 +1,6 @@
-Automated Network Vulnerability Scanner (Student Project)
+# Automated Network Vulnerability Scanner (Student Project)
 
-
-
-Overview
-
+## Overview
 
 This project is a Python-based automated network vulnerability scanner built as a learning exercise to understand how network scanning, service enumeration, and basic risk assessment work in practice.
 
@@ -11,11 +8,7 @@ The tool uses Nmap to scan a target system, parses the XML output, and presents 
 
 This project is intended for educational and defensive security purposes only.
 
-
-
-
-Features
-
+## Features
 
 * Automated port scanning and service detection using Nmap
 * Executes Nmap vulnerability scripts (--script vuln)
@@ -23,47 +16,32 @@ Features
 * Displays:
    * Open ports and detected services
    * Vulnerability script findings (if any)
-* 
 * Calculates a simple risk score (0–100) based on:
    * Number of open ports
    * Type of exposed services
    * Presence of vulnerability script results
-* 
 * Categorizes risk as Low, Medium, High, or Critical
 * User-friendly GUI interface using Tkinter
 
-
-
-
-
-How It Works (High Level)
-
+## How It Works (High Level)
 
 1. The user enters an IP address or hostname into the GUI.
 2. The script runs Nmap using:
    * Service detection (-sV)
    * Vulnerability scripts (--script vuln)
    * XML output (-oX -)
-3. 
-4. The XML output is parsed using Python’s xml.etree.ElementTree.
-5. The program:
+3. The XML output is parsed using Python's xml.etree.ElementTree.
+4. The program:
    * Identifies open ports
    * Extracts detected services
    * Collects vulnerability script outputs (if present)
-6. 
-7. A basic risk score is calculated using simple heuristics:
+5. A basic risk score is calculated using simple heuristics:
    * Open ports increase the score
    * Common high-risk services increase the score further
    * Detected vulnerability scripts add more weight
-8. 
-9. Results are displayed in the GUI in a readable format.
+6. Results are displayed in the GUI in a readable format.
 
-
-
-
-
-Technologies Used
-
+## Technologies Used
 
 * Python 3
 * Nmap
@@ -71,44 +49,37 @@ Technologies Used
 * subprocess (to execute Nmap)
 * xml.etree.ElementTree (XML parsing)
 
+## Setup & Usage
 
-
-
-
-Setup & Usage
-
-
-
-Prerequisites
-
+### Prerequisites
 
 * Python 3 installed
 * Nmap installed and accessible from the command line
 * Linux or macOS recommended (tested with Kali Linux)
 
-Running the Tool
-
+### Running the Tool
+```bash
 python3 scanner.py
+```
 
 1. Enter an IP address or hostname (e.g., 127.0.0.1)
 2. Click Run Scan
 3. View scan results and calculated risk score in the output window
 
-Example Output
-
+### Example Output
+```
 Risk Score: 62/100 (High)
 
 Open Ports and Services:
- - 22 : ssh
- - 80 : http
+ - 22 : ssh
+ - 80 : http
 
 Vulnerability Findings:
 
- - port 80 (http) [http-vuln-cveXXXX] => Potential vulnerability detected
+ - port 80 (http) [http-vuln-cveXXXX] => Potential vulnerability detected
+```
 
-
-Risk Scoring Logic (Simplified)
-
+## Risk Scoring Logic (Simplified)
 
 * Each open port adds to the score
 * Common services (e.g., SSH, FTP, HTTP, SMB, databases) add more weight
@@ -119,16 +90,10 @@ Risk Scoring Logic (Simplified)
    * Medium: 30–59
    * High: 60–84
    * Critical: ≥ 85
-* 
-
 
 The scoring system is not industry-standard and is meant purely for learning and experimentation.
 
-
-
-
-Limitations
-
+## Limitations
 
 * Not a replacement for professional vulnerability scanners
 * Risk scoring is heuristic-based and not CVSS-accurate
@@ -136,12 +101,7 @@ Limitations
 * No authentication testing or deep exploitation
 * GUI is basic and not optimized for large scans
 
-
-
-
-
-What I Learned
-
+## What I Learned
 
 * How Nmap works internally and how to automate it
 * Parsing XML data programmatically in Python
@@ -149,12 +109,7 @@ What I Learned
 * Designing simple GUIs using Tkinter
 * Translating technical scan results into human-readable output
 
-
-
-
-
-Future Improvements
-
+## Future Improvements
 
 * Integrate CVSS scoring for vulnerabilities
 * Export scan results to a report file (PDF/JSON)
@@ -162,12 +117,7 @@ Future Improvements
 * Add support for scanning multiple targets
 * Add logging and error handling
 
-
-
-
-
-Ethical Disclaimer
-
+## Ethical Disclaimer
 
 This tool is intended only for educational use and authorized testing.
 Do not scan systems you do not own or have explicit permission to test.
